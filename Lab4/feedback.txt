@@ -1,0 +1,12 @@
+Task 1:
+arguments=['1.8', '-0.5', '1', '0', '-1.57', '0', 'base_footprint', 'imu_link'],
+
+Comment :-1.57 should be a yaw angle (4th parameter) (x y z yaw pitch roll)
+
+Comment: Please always make sure to read the question properly and stick to the names: (carkyo_static_tf_launch.py, zed2_link and so..)
+
+
+Task 2:
+Good work. But the lidar goes only on one direction (down) and once then it stops. I could see that both on tetrminal print and rviz.
+Again: I expected the frame names to be "lidar_link" and "servo_link" as shown in lab slides, Also the python file name: brodcast_lidar_transform.py
+
