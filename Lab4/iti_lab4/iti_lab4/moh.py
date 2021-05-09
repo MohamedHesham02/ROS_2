@@ -5,6 +5,7 @@ from rclpy.qos import QoSProfile
 from geometry_msgs.msg import Quaternion
 from sensor_msgs.msg import JointState
 from tf2_ros import TransformBroadcaster, TransformStamped
+import math
 
 class StatePublisher(Node):
 
@@ -17,7 +18,8 @@ class StatePublisher(Node):
         self.broadcaster = TransformBroadcaster(self, qos=qos_profile)
         self.nodeName = self.get_name()
         self.get_logger().info("{0} started".format(self.nodeName))
-        self.y=0
+        self.y=-30
+        self.sign=0
 
         degree = pi / 180.0
         loop_rate = self.create_rate(2)
@@ -40,10 +42,6 @@ class StatePublisher(Node):
             while rclpy.ok():
                 rclpy.spin_once(self)
 
-                while self.y >= 0.52:
-                    self.y-=0.1
-                
-
 
                 # update joint_state
                 now = self.get_clock().now()
@@ -58,21 +56,24 @@ class StatePublisher(Node):
                 odom_trans.transform.translation.y = .0
                 odom_trans.transform.translation.z = .0
                 odom_trans.transform.rotation = \
-                    euler_to_quaternion(0, self.y, 0) # roll,pitch,yaw
-                
-                if self.y <= 0.52:
-                    self.y+=0.1
-                
+                    euler_to_quaternion(0, (self.y * math.pi)/180, 0) # roll,pitch,yaw
 
+                self.y=self.y+1*self.sign
 
+                if self.y == -30:
+                    self.sign=1
+                    
                 
+                elif self.y == 30:
+                    self.sign=-1
+
 
                 # send the joint state and transform
                 self.joint_pub.publish(joint_state)
                 self.broadcaster.sendTransform(odom_trans)
 
-
                 print(self.y)
+                
 
                 # This will adjust as needed per iteration
                 loop_rate.sleep()
