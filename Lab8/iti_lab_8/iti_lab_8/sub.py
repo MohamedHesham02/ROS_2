@@ -8,14 +8,12 @@ from example_interfaces.msg import String
 class str_subscribe (Node):
     def __init__(self):
         super().__init__("subscribe")
-        self.create_subscription(String,"str_topic",self.timer_call1,10) 
-        self.create_subscription(String,"str_topic",self.timer_call2,10) 
+        self.create_subscription(String,"str_topic",self.timer_call,10) 
+
      
-    def timer_call1(self, msg):
+    def timer_call(self, msg):
         self.get_logger().info(msg.data)
 
-    def timer_call2(self, msg):
-        self.get_logger().info(msg.data)
     
 def main (args=None):
 

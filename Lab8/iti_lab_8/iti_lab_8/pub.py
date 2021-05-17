@@ -10,18 +10,25 @@ class str_publisher (Node):
         self.i=1
         self.obj_pub=self.create_publisher(String,"str_topic",10)
         self.create_timer(0.5,self.timer_call)
+        self.x="Hello"
 
     def timer_call(self):
         
         self.i+=1
+        msg=String()
 
         if (self.i % 2 != 0):
-            self.get_logger().info("Hello")
+            self.x="Hello"
+            self.get_logger().info(self.x)
+            
         if (self.i % 2 == 0):
-            self.get_logger().info("Hi!")
-        msg=String()
-        msg.data="I've heard msg"
+            self.x="Hi!"
+            self.get_logger().info(self.x)
+
+        msg.data="I've heard "+self.x
         self.obj_pub.publish(msg)
+
+
 
 
 
