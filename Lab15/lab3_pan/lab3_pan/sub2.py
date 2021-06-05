@@ -64,13 +64,15 @@ class str_subscribe (Node):
             self.x_9=plan.poses[9].pose.position.x 
             self.y_9=plan.poses[9].pose.position.y
 
-
             new_roll_1,new_pitch_1,new_yaw_1=self.euler_from_quaternion(plan.poses[2].pose.orientation)
             new_roll_2,new_pitch_2,new_yaw_2=self.euler_from_quaternion(plan.poses[7].pose.orientation)
 
             orientation=new_yaw_1-new_yaw_2
-
+            
             curvature=self.menger_curvature(self.x_2,self.y_2,self.x_5,self.y_5,self.x_9,self.y_9)
+
+            self.get_logger().info(str(curvature))
+
 
             msgs=String()
             msgs.data= "The path is straight"
@@ -81,7 +83,7 @@ class str_subscribe (Node):
             msgl=String()
             msgl.data="The robot is turning left with a curvature: "+str(curvature)
 
-            if orientation == 0 : 
+            if curvature < 1.0: 
                 self.obj_pub.publish(msgs)
                 self.get_logger().info(msgs.data)
 
